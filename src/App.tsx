@@ -86,6 +86,56 @@ export const App: React.FC = () => {
     }
   };
 
+  // Keep browser-native text editing undo intact inside fields while offering
+  // app-level history and common document actions everywhere else.
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      const key = event.key.toLowerCase();
+      const modifier = event.ctrlKey || event.metaKey;
+      if (!modifier || event.altKey) return;
+
+      const target = event.target;
+      const isEditable = target instanceof HTMLElement && (
+        target.isContentEditable ||
+        target instanceof HTMLInputElement ||
+        target instanceof HTMLTextAreaElement ||
+        target instanceof HTMLSelectElement
+      );
+
+      if (key === 's') {
+        event.preventDefault();
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(paper));
+          showNotification('Saved in this browser');
+        } catch (error) {
+          console.warn('Could not save to localStorage:', error);
+          showNotification('Could not save in this browser');
+        }
+        return;
+      }
+
+      if (isEditable) return;
+
+      if (key === 'z') {
+        event.preventDefault();
+        if (event.shiftKey) handleRedo();
+        else handleUndo();
+      } else if (key === 'y') {
+        event.preventDefault();
+        handleRedo();
+      } else if (event.shiftKey && key === 'e') {
+        event.preventDefault();
+        void handleExportDocx();
+      } else if (event.shiftKey && key === 'u') {
+        event.preventDefault();
+        setIsUploadModalOpen(true);
+      }
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  });
+
   // Find active question object
   const findActiveQuestion = (): QuestionItem | null => {
     if (!activeQuestionId) return null;
@@ -313,7 +363,8 @@ export const App: React.FC = () => {
               onClick={handleUndo}
               disabled={historyIndex <= 0}
               className="px-2.5 py-1 text-muted hover:text-canvas disabled:opacity-30 border-r border-border"
-              title="Undo"
+              title="Undo (Ctrl/⌘+Z)"
+              aria-keyshortcuts="Control+Z Meta+Z"
             >
               Undo
             </button>
@@ -322,7 +373,8 @@ export const App: React.FC = () => {
               onClick={handleRedo}
               disabled={historyIndex >= history.length - 1}
               className="px-2.5 py-1 text-muted hover:text-canvas disabled:opacity-30"
-              title="Redo"
+              title="Redo (Ctrl/⌘+Shift+Z or Ctrl/⌘+Y)"
+              aria-keyshortcuts="Control+Shift+Z Meta+Shift+Z Control+Y Meta+Y"
             >
               Redo
             </button>
@@ -333,6 +385,8 @@ export const App: React.FC = () => {
             type="button"
             onClick={() => setIsUploadModalOpen(true)}
             className="px-3 py-1 bg-surface border border-border hover:border-accent text-canvas transition-colors uppercase tracking-wider"
+            title="Upload image / OCR (Ctrl/⌘+Shift+U)"
+            aria-keyshortcuts="Control+Shift+U Meta+Shift+U"
           >
             Upload Image / OCR
           </button>
@@ -343,6 +397,8 @@ export const App: React.FC = () => {
             onClick={handleExportDocx}
             disabled={isExporting}
             className="px-4 py-1 bg-accent hover:bg-accent-hover text-black font-semibold transition-colors uppercase tracking-wider disabled:opacity-40"
+            title="Export DOCX (Ctrl/⌘+Shift+E)"
+            aria-keyshortcuts="Control+Shift+E Meta+Shift+E"
           >
             {isExporting ? 'Generating...' : 'Export DOCX'}
           </button>
