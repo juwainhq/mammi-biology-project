@@ -23,39 +23,41 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
   const settings = paper.settings;
 
   return (
-    <aside className="w-80 bg-white border-l border-gray-200 flex flex-col h-full overflow-y-auto select-none text-xs">
+    <aside className="w-80 bg-surface border-l border-border flex flex-col h-full overflow-y-auto select-none text-xs font-mono">
       {/* Header */}
-      <div className="p-3.5 border-b border-gray-200 bg-gray-50/70 font-bold text-gray-800 flex items-center gap-2">
-        <span>⚙️ ফরম্যাটিং ও প্রোপার্টিজ</span>
+      <div className="p-4 border-b border-border flex items-center justify-between">
+        <span className="text-[11px] uppercase tracking-widest text-muted font-semibold">
+          Properties & Settings
+        </span>
       </div>
 
       <div className="p-4 space-y-6">
         {/* Document Typography */}
         <div className="space-y-3">
-          <h4 className="font-bold text-gray-700 uppercase tracking-wider text-[11px]">
-            টাইপোগ্রাফি ও ফন্ট
+          <h4 className="text-[10px] font-semibold text-muted uppercase tracking-widest">
+            Typography
           </h4>
 
           <div>
-            <label className="block text-gray-600 mb-1 font-medium">বাংলা ফন্ট:</label>
+            <label className="block text-muted text-[11px] mb-1">Bangla Font</label>
             <select
               value={settings.primaryFont}
               onChange={(e) =>
                 onUpdateSettings({ primaryFont: e.target.value as any })
               }
-              className="w-full p-2 border border-gray-300 rounded-md bg-white font-medium focus:ring-1 focus:ring-emerald-500"
+              className="w-full p-2 bg-black border border-border text-canvas focus:border-accent outline-none"
             >
-              <option value="Kalpurush">কালপুরুষ (Kalpurush — প্রমিত)</option>
-              <option value="Noto Sans Bengali">নোটো স্যান্স বেঙ্গলি</option>
-              <option value="Tiro Bangla">তিরো বাংলা (Tiro Bangla)</option>
-              <option value="SolaimanLipi">সোলায়মান লিপি</option>
-              <option value="SutonnyMJ">SutonnyMJ (বিজয় মোড)</option>
+              <option value="Kalpurush">কালপুরুষ (Kalpurush — Standard)</option>
+              <option value="Noto Sans Bengali">Noto Sans Bengali</option>
+              <option value="Tiro Bangla">Tiro Bangla (Serif)</option>
+              <option value="SolaimanLipi">SolaimanLipi</option>
+              <option value="SutonnyMJ">SutonnyMJ (Bijoy Mode)</option>
             </select>
           </div>
 
           <div className="grid grid-cols-2 gap-2">
             <div>
-              <label className="block text-gray-600 mb-1">সাইজ (Pt):</label>
+              <label className="block text-muted text-[11px] mb-1">Size (Pt)</label>
               <input
                 type="number"
                 min="9"
@@ -64,63 +66,63 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
                 onChange={(e) =>
                   onUpdateSettings({ fontSizePt: parseFloat(e.target.value) || 12 })
                 }
-                className="w-full p-1.5 border border-gray-300 rounded-md"
+                className="w-full p-1.5 bg-black border border-border text-canvas focus:border-accent outline-none"
               />
             </div>
             <div>
-              <label className="block text-gray-600 mb-1">লাইন স্পেসিং:</label>
+              <label className="block text-muted text-[11px] mb-1">Line Height</label>
               <select
                 value={settings.lineSpacing}
                 onChange={(e) =>
                   onUpdateSettings({ lineSpacing: parseFloat(e.target.value) || 1.35 })
                 }
-                className="w-full p-1.5 border border-gray-300 rounded-md bg-white"
+                className="w-full p-1.5 bg-black border border-border text-canvas focus:border-accent outline-none"
               >
-                <option value={1.15}>১.১৫ (কম্প্যাক্ট)</option>
-                <option value={1.35}>১.৩৫ (স্ট্যান্ডার্ড)</option>
-                <option value={1.5}>১.৫০ (প্রশস্ত)</option>
+                <option value={1.15}>1.15 (Compact)</option>
+                <option value={1.35}>1.35 (Standard)</option>
+                <option value={1.5}>1.50 (Comfortable)</option>
               </select>
             </div>
           </div>
         </div>
 
-        {/* Paper Margins & Page Size */}
-        <div className="space-y-3 pt-3 border-t border-gray-200">
-          <h4 className="font-bold text-gray-700 uppercase tracking-wider text-[11px]">
-            পৃষ্ঠা ও মার্জিন
+        {/* Paper & Margins */}
+        <div className="space-y-3 pt-3 border-t border-border">
+          <h4 className="text-[10px] font-semibold text-muted uppercase tracking-widest">
+            Page & Layout
           </h4>
           <div className="grid grid-cols-2 gap-2">
             <div>
-              <label className="block text-gray-600 mb-1">পৃষ্ঠা সাইজ:</label>
+              <label className="block text-muted text-[11px] mb-1">Paper Size</label>
               <select
                 value={settings.pageSize}
                 onChange={(e) =>
                   onUpdateSettings({ pageSize: e.target.value as any })
                 }
-                className="w-full p-1.5 border border-gray-300 rounded-md bg-white"
+                className="w-full p-1.5 bg-black border border-border text-canvas focus:border-accent outline-none"
               >
-                <option value="A4">A4 (210 × 297 mm)</option>
+                <option value="A4">A4 (210×297 mm)</option>
                 <option value="Letter">Letter</option>
               </select>
             </div>
             <div>
-              <label className="block text-gray-600 mb-1">নম্বর পজিশন:</label>
+              <label className="block text-muted text-[11px] mb-1">Marks Position</label>
               <select
                 value={settings.marksPlacement}
                 onChange={(e) =>
                   onUpdateSettings({ marksPlacement: e.target.value as any })
                 }
-                className="w-full p-1.5 border border-gray-300 rounded-md bg-white"
+                className="w-full p-1.5 bg-black border border-border text-canvas focus:border-accent outline-none"
               >
-                <option value="right">ডান মার্জিন (বোর্ড স্টাইল)</option>
-                <option value="inline">ইনলাইন [১, ২, ৩]</option>
+                <option value="right">Right Margin (Board)</option>
+                <option value="inline">Inline [1, 2, 3]</option>
               </select>
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-2">
             <div>
-              <label className="block text-gray-600 mb-1">টপ/বটম (মিমি):</label>
+              <label className="block text-muted text-[11px] mb-1">Top/Bottom (mm)</label>
               <input
                 type="number"
                 value={settings.margins.topMm}
@@ -133,11 +135,11 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
                     },
                   })
                 }
-                className="w-full p-1.5 border border-gray-300 rounded-md"
+                className="w-full p-1.5 bg-black border border-border text-canvas focus:border-accent outline-none"
               />
             </div>
             <div>
-              <label className="block text-gray-600 mb-1">লেফট/রাইট (মিমি):</label>
+              <label className="block text-muted text-[11px] mb-1">Left/Right (mm)</label>
               <input
                 type="number"
                 value={settings.margins.leftMm}
@@ -150,109 +152,111 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
                     },
                   })
                 }
-                className="w-full p-1.5 border border-gray-300 rounded-md"
+                className="w-full p-1.5 bg-black border border-border text-canvas focus:border-accent outline-none"
               />
             </div>
           </div>
         </div>
 
-        {/* Exam Paper Header Meta */}
-        <div className="space-y-3 pt-3 border-t border-gray-200">
-          <h4 className="font-bold text-gray-700 uppercase tracking-wider text-[11px]">
-            পরীক্ষার হেডার তথ্য
+        {/* Exam Header Meta */}
+        <div className="space-y-3 pt-3 border-t border-border">
+          <h4 className="text-[10px] font-semibold text-muted uppercase tracking-widest">
+            Header Metadata
           </h4>
           <div>
-            <label className="block text-gray-600 mb-1">বোর্ড / কলেজের নাম:</label>
+            <label className="block text-muted text-[11px] mb-1">Board / College</label>
             <input
               type="text"
               value={paper.header.boardOrCollege}
               onChange={(e) => onUpdateHeader('boardOrCollege', e.target.value)}
-              className="w-full p-1.5 border border-gray-300 rounded-md font-medium"
+              className="w-full p-1.5 bg-black border border-border text-canvas focus:border-accent outline-none font-sans"
             />
           </div>
           <div className="grid grid-cols-2 gap-2">
             <div>
-              <label className="block text-gray-600 mb-1">পরীক্ষার নাম:</label>
+              <label className="block text-muted text-[11px] mb-1">Exam</label>
               <input
                 type="text"
                 value={paper.header.examName}
                 onChange={(e) => onUpdateHeader('examName', e.target.value)}
-                className="w-full p-1.5 border border-gray-300 rounded-md"
+                className="w-full p-1.5 bg-black border border-border text-canvas focus:border-accent outline-none font-sans"
               />
             </div>
             <div>
-              <label className="block text-gray-600 mb-1">বছর:</label>
+              <label className="block text-muted text-[11px] mb-1">Year</label>
               <input
                 type="text"
                 value={paper.header.year}
                 onChange={(e) => onUpdateHeader('year', e.target.value)}
-                className="w-full p-1.5 border border-gray-300 rounded-md font-mono"
+                className="w-full p-1.5 bg-black border border-border text-canvas focus:border-accent outline-none font-mono"
               />
             </div>
           </div>
           <div>
-            <label className="block text-gray-600 mb-1">বিষয়:</label>
+            <label className="block text-muted text-[11px] mb-1">Subject</label>
             <input
               type="text"
               value={paper.header.subject}
               onChange={(e) => onUpdateHeader('subject', e.target.value)}
-              className="w-full p-1.5 border border-gray-300 rounded-md"
+              className="w-full p-1.5 bg-black border border-border text-canvas focus:border-accent outline-none font-sans"
             />
           </div>
           <div className="grid grid-cols-2 gap-2">
             <div>
-              <label className="block text-gray-600 mb-1">সময়:</label>
+              <label className="block text-muted text-[11px] mb-1">Time</label>
               <input
                 type="text"
                 value={paper.header.timeAllowed}
                 onChange={(e) => onUpdateHeader('timeAllowed', e.target.value)}
-                className="w-full p-1.5 border border-gray-300 rounded-md"
+                className="w-full p-1.5 bg-black border border-border text-canvas focus:border-accent outline-none font-sans"
               />
             </div>
             <div>
-              <label className="block text-gray-600 mb-1">পূর্ণমান:</label>
+              <label className="block text-muted text-[11px] mb-1">Marks</label>
               <input
                 type="text"
                 value={paper.header.totalMarks}
                 onChange={(e) => onUpdateHeader('totalMarks', e.target.value)}
-                className="w-full p-1.5 border border-gray-300 rounded-md font-mono"
+                className="w-full p-1.5 bg-black border border-border text-canvas focus:border-accent outline-none font-mono"
               />
             </div>
           </div>
         </div>
 
-        {/* Active Question Properties (Diagram controls if selected) */}
+        {/* Selected Question Controls */}
         {activeQuestion && (
-          <div className="space-y-3 pt-3 border-t border-gray-200 bg-emerald-50/40 p-3 rounded-lg border border-emerald-100">
-            <h4 className="font-bold text-emerald-800 uppercase tracking-wider text-[11px] flex justify-between">
-              <span>সিলেক্টেড প্রশ্ন ({activeQuestion.number})</span>
-              <span className="font-mono text-emerald-600">
-                {activeQuestion.kind === 'creative' ? 'সৃজনশীল' : 'MCQ'}
+          <div className="space-y-3 pt-3 border-t border-border bg-black p-3 border border-border">
+            <div className="flex justify-between items-center">
+              <span className="text-[10px] font-semibold text-accent uppercase tracking-widest">
+                Selected: Q{activeQuestion.number}
               </span>
-            </h4>
+              <span className="text-[10px] text-muted uppercase">
+                {activeQuestion.kind}
+              </span>
+            </div>
 
             <div>
-              <label className="block text-gray-600 mb-1">প্রশ্ন নম্বর:</label>
+              <label className="block text-muted text-[11px] mb-1">Question Number</label>
               <input
                 type="text"
                 value={activeQuestion.number}
                 onChange={(e) =>
                   onUpdateQuestion({ ...activeQuestion, number: e.target.value })
                 }
-                className="w-full p-1.5 border border-gray-300 rounded-md bg-white font-bold"
+                className="w-full p-1.5 bg-surface border border-border text-canvas focus:border-accent outline-none font-mono font-bold"
               />
             </div>
 
             {/* Diagram Controls */}
             {activeQuestion.diagrams.length > 0 && (
-              <div className="space-y-2 pt-2">
-                <label className="block font-semibold text-gray-700">
-                  সংযুক্ত চিত্র সেটিংস:
+              <div className="space-y-2 pt-2 border-t border-border">
+                <label className="block text-[11px] text-muted uppercase tracking-wider">
+                  Attached Diagrams
                 </label>
                 {activeQuestion.diagrams.map((diag, dIdx) => (
-                  <div key={diag.id} className="space-y-1.5 bg-white p-2 rounded border">
-                    <div className="flex justify-between items-center">
-                      <span className="font-medium text-gray-600">চিত্র #{dIdx + 1}</span>
+                  <div key={diag.id} className="space-y-2 bg-surface p-2 border border-border">
+                    <div className="flex justify-between items-center text-[10px]">
+                      <span className="text-muted">Figure #{dIdx + 1}</span>
                       <button
                         type="button"
                         onClick={() => {
@@ -261,13 +265,13 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
                           );
                           onUpdateQuestion({ ...activeQuestion, diagrams: updated });
                         }}
-                        className="text-red-500 hover:text-red-700"
+                        className="text-red-400 hover:text-red-300"
                       >
-                        মুছুন
+                        Remove
                       </button>
                     </div>
                     <div>
-                      <label className="text-[10px] text-gray-500">ক্যাপশন:</label>
+                      <label className="text-[10px] text-muted">Caption</label>
                       <input
                         type="text"
                         value={diag.caption || ''}
@@ -277,12 +281,12 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
                           onUpdateQuestion({ ...activeQuestion, diagrams: updated });
                         }}
                         placeholder="চিত্র: ..."
-                        className="w-full p-1 border rounded text-xs"
+                        className="w-full p-1 bg-black border border-border text-canvas text-xs focus:border-accent outline-none font-sans"
                       />
                     </div>
                     <div className="grid grid-cols-2 gap-1.5">
                       <div>
-                        <label className="text-[10px] text-gray-500">প্রস্থ (px):</label>
+                        <label className="text-[10px] text-muted">Width (px)</label>
                         <input
                           type="number"
                           value={diag.width || 380}
@@ -294,11 +298,11 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
                             };
                             onUpdateQuestion({ ...activeQuestion, diagrams: updated });
                           }}
-                          className="w-full p-1 border rounded text-xs"
+                          className="w-full p-1 bg-black border border-border text-canvas text-xs focus:border-accent outline-none font-mono"
                         />
                       </div>
                       <div>
-                        <label className="text-[10px] text-gray-500">অ্যালাইনমেন্ট:</label>
+                        <label className="text-[10px] text-muted">Alignment</label>
                         <select
                           value={diag.alignment || 'center'}
                           onChange={(e) => {
@@ -306,11 +310,11 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
                             updated[dIdx] = { ...diag, alignment: e.target.value as any };
                             onUpdateQuestion({ ...activeQuestion, diagrams: updated });
                           }}
-                          className="w-full p-1 border rounded text-xs bg-white"
+                          className="w-full p-1 bg-black border border-border text-canvas text-xs focus:border-accent outline-none font-mono"
                         >
-                          <option value="left">বামে</option>
-                          <option value="center">মাঝে</option>
-                          <option value="right">ডানে</option>
+                          <option value="left">Left</option>
+                          <option value="center">Center</option>
+                          <option value="right">Right</option>
                         </select>
                       </div>
                     </div>

@@ -16,72 +16,78 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
   onAddQuestion,
   onDeleteQuestion,
 }) => {
+  const totalCount = paper.sections.reduce((acc, s) => acc + s.questions.length, 0);
+
   return (
-    <aside className="w-72 bg-white border-r border-gray-200 flex flex-col h-full overflow-hidden select-none">
-      {/* Title Header */}
-      <div className="p-3.5 border-b border-gray-200 bg-gray-50/70 flex items-center justify-between">
+    <aside className="w-64 bg-surface border-r border-border flex flex-col h-full overflow-hidden select-none">
+      {/* Header */}
+      <div className="p-4 border-b border-border flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="text-emerald-700 font-bold text-sm">📑 প্রশ্ন কাঠামো</span>
-          <span className="text-xs bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded-full font-mono">
-            {paper.sections.reduce((acc, s) => acc + s.questions.length, 0)}
+          <span className="text-[11px] uppercase tracking-widest text-muted font-mono font-semibold">
+            Structure
+          </span>
+          <span className="text-[11px] font-mono text-accent">
+            [{totalCount.toString().padStart(2, '0')}]
           </span>
         </div>
       </div>
 
-      {/* Sections & Tree Hierarchy */}
-      <div className="flex-1 overflow-y-auto p-3 space-y-4">
-        {paper.sections.map((section) => (
-          <div key={section.id} className="space-y-1.5">
+      {/* Sections and Questions Hierarchy */}
+      <div className="flex-1 overflow-y-auto p-3 space-y-6">
+        {paper.sections.map((section, sIdx) => (
+          <div key={section.id} className="space-y-2">
             <div className="flex items-center justify-between group px-1">
-              <span className="text-xs font-bold text-gray-700 truncate" title={section.title}>
-                {section.title}
+              <span className="text-[11px] font-mono uppercase tracking-wider text-muted truncate" title={section.title}>
+                {(sIdx + 1).toString().padStart(2, '0')} · {section.title}
               </span>
-              <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
+              <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 font-mono">
                 <button
                   type="button"
                   onClick={() => onAddQuestion(section.id, 'creative')}
-                  title="নতুন সৃজনশীল প্রশ্ন যোগ করুন"
-                  className="p-1 hover:bg-emerald-100 text-emerald-700 rounded text-[11px] font-medium"
+                  title="Add Creative Question (CQ)"
+                  className="px-1.5 py-0.5 text-[10px] text-muted hover:text-accent hover:border-accent border border-border"
                 >
-                  + CQ
+                  +CQ
                 </button>
                 <button
                   type="button"
                   onClick={() => onAddQuestion(section.id, 'mcq')}
-                  title="নতুন বহুনির্বাচনি প্রশ্ন যোগ করুন"
-                  className="p-1 hover:bg-blue-100 text-blue-700 rounded text-[11px] font-medium"
+                  title="Add MCQ Question"
+                  className="px-1.5 py-0.5 text-[10px] text-muted hover:text-accent hover:border-accent border border-border"
                 >
-                  + MCQ
+                  +MCQ
                 </button>
               </div>
             </div>
 
             {/* Questions List */}
-            <div className="space-y-1 pl-1">
+            <div className="space-y-1">
               {section.questions.map((q) => {
                 const isActive = q.id === activeQuestionId;
                 return (
                   <div
                     key={q.id}
-                    className={`rounded-lg border text-xs transition-all ${
+                    className={`border transition-all ${
                       isActive
-                        ? 'bg-emerald-50 border-emerald-300 shadow-sm'
-                        : 'bg-white border-gray-200 hover:border-gray-300'
+                        ? 'bg-black border-accent'
+                        : 'bg-surface-subtle border-border hover:border-border-strong'
                     }`}
                   >
                     <div
                       onClick={() => onSelectQuestion(q.id)}
-                      className="p-2 flex items-center justify-between cursor-pointer"
+                      className="p-2.5 flex items-center justify-between cursor-pointer"
                     >
-                      <div className="flex items-center gap-1.5 truncate">
+                      <div className="flex items-center gap-2 truncate">
                         <span
-                          className={`w-2 h-2 rounded-full ${
-                            q.kind === 'creative' ? 'bg-emerald-500' : 'bg-blue-500'
+                          className={`w-1 h-3 ${
+                            isActive ? 'bg-accent' : 'bg-border-strong'
                           }`}
                         />
-                        <span className="font-bold text-gray-900">প্রশ্ন {q.number}</span>
-                        <span className="text-[10px] text-gray-500 truncate max-w-[100px]">
-                          {q.stimulus ? q.stimulus.substring(0, 18) + '...' : ''}
+                        <span className="font-mono text-xs font-semibold text-canvas">
+                          Q{q.number}
+                        </span>
+                        <span className="text-[11px] text-muted truncate max-w-[90px] font-sans">
+                          {q.stimulus ? q.stimulus.substring(0, 14) + '...' : ''}
                         </span>
                       </div>
                       <button
@@ -90,26 +96,26 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
                           e.stopPropagation();
                           onDeleteQuestion(q.id);
                         }}
-                        className="text-gray-400 hover:text-red-500 p-1 text-[11px]"
-                        title="প্রশ্নটি মুছে ফেলুন"
+                        className="text-muted hover:text-red-400 p-0.5 text-[11px] font-mono"
+                        title="Delete Question"
                       >
                         ✕
                       </button>
                     </div>
 
-                    {/* Sub-question tree breakdown for CQ */}
+                    {/* Creative Question Sub-tree */}
                     {q.kind === 'creative' && q.subQuestions.length > 0 && (
-                      <div className="pl-6 pr-2 pb-2 text-[11px] space-y-0.5 border-t border-emerald-100/60 pt-1 text-gray-600">
+                      <div className="px-3 pb-2 text-[11px] space-y-1 border-t border-border/50 pt-1.5 font-mono">
                         {q.subQuestions.map((sq) => (
                           <div
                             key={sq.id}
                             onClick={() => onSelectQuestion(q.id)}
-                            className="flex items-center justify-between py-0.5 px-1 hover:bg-emerald-100/40 rounded cursor-pointer"
+                            className="flex items-center justify-between text-muted hover:text-canvas cursor-pointer py-0.5"
                           >
-                            <span className="font-medium">
-                              ├─ {sq.part}) {sq.text ? sq.text.substring(0, 14) + '...' : 'খালি'}
+                            <span className="truncate">
+                              {sq.part}) {sq.text ? sq.text.substring(0, 10) + '...' : 'খালি'}
                             </span>
-                            <span className="text-[10px] text-emerald-800 font-mono">
+                            <span className="text-[10px] text-accent">
                               [{sq.marks}]
                             </span>
                           </div>
@@ -117,9 +123,9 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
                       </div>
                     )}
 
-                    {/* MCQ Options preview */}
+                    {/* MCQ Options */}
                     {q.kind === 'mcq' && q.options.length > 0 && (
-                      <div className="pl-6 pr-2 pb-2 text-[11px] grid grid-cols-2 gap-0.5 border-t border-blue-100/60 pt-1 text-gray-600">
+                      <div className="px-3 pb-2 text-[11px] grid grid-cols-2 gap-1 border-t border-border/50 pt-1.5 font-mono text-muted">
                         {q.options.map((opt) => (
                           <span key={opt.id} className="truncate">
                             {opt.label}) {opt.text}
@@ -132,8 +138,8 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
               })}
 
               {section.questions.length === 0 && (
-                <div className="text-center p-3 text-xs text-gray-400 border border-dashed rounded-lg">
-                  কোনো প্রশ্ন নেই
+                <div className="text-center p-4 text-[11px] font-mono text-muted border border-dashed border-border">
+                  Empty section
                 </div>
               )}
             </div>
@@ -141,17 +147,17 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
         ))}
       </div>
 
-      {/* Quick Add Buttons at bottom */}
-      <div className="p-3 border-t border-gray-200 bg-gray-50 flex gap-2">
+      {/* Footer Add Buttons */}
+      <div className="p-3 border-t border-border bg-black flex gap-2 font-mono">
         <button
           type="button"
           onClick={() => {
             const firstSec = paper.sections[0]?.id;
             if (firstSec) onAddQuestion(firstSec, 'creative');
           }}
-          className="flex-1 py-1.5 px-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-xs font-semibold shadow-sm transition-colors text-center"
+          className="flex-1 py-1.5 text-xs text-canvas bg-surface border border-border hover:border-accent transition-colors uppercase tracking-wider"
         >
-          + সৃজনশীল (CQ)
+          + CQ
         </button>
         <button
           type="button"
@@ -159,9 +165,9 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
             const firstSec = paper.sections[0]?.id;
             if (firstSec) onAddQuestion(firstSec, 'mcq');
           }}
-          className="flex-1 py-1.5 px-2 bg-blue-600 hover:bg-blue-700 text-white rounded text-xs font-semibold shadow-sm transition-colors text-center"
+          className="flex-1 py-1.5 text-xs text-canvas bg-surface border border-border hover:border-accent transition-colors uppercase tracking-wider"
         >
-          + বহুনির্বাচনি (MCQ)
+          + MCQ
         </button>
       </div>
     </aside>

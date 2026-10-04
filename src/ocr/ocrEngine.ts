@@ -1,15 +1,3 @@
-/**
- * Browser-side OCR engine using Tesseract.js with offline bundled models:
- * - Bengali (ben)
- * - English (eng)
- *
- * Provides:
- * - Image preprocessing (contrast enhancement, binarization, deskewing)
- * - Word & line bounding boxes and confidence scores
- * - Low-confidence word highlighting
- * - Diagram region extraction/cropping
- */
-
 import { createWorker } from 'tesseract.js';
 
 export interface OcrProgress {
@@ -32,6 +20,19 @@ export interface OcrResult {
 
 let workerInstance: any = null;
 
+/**
+ * Resolves an asset path safely for both root deployments and GitHub Pages subpaths
+ * e.g., 'workers/worker.min.js' -> 'https://juwainhq.github.io/repo/workers/worker.min.js'
+ */
+function resolveAssetPath(relativePath: string): string {
+  if (typeof window !== 'undefined' && window.location) {
+    const base = window.location.href.split('?')[0].split('#')[0];
+    const dir = base.endsWith('/') ? base : base.substring(0, base.lastIndexOf('/') + 1);
+    return new URL(relativePath.replace(/^\//, ''), dir).toString();
+  }
+  return relativePath;
+}
+
 export async function getOcrWorker(
   onProgress?: (progress: OcrProgress) => void
 ): Promise<any> {
@@ -39,11 +40,15 @@ export async function getOcrWorker(
     return workerInstance;
   }
 
-  // Create worker configured for local files
+  const workerPath = resolveAssetPath('workers/worker.min.js');
+  const corePath = resolveAssetPath('workers/tesseract-core-simd-lstm.js');
+  const langPath = resolveAssetPath('tessdata');
+
+  // Create worker configured for static GitHub Pages asset paths
   const worker = await createWorker(['ben', 'eng'], 1, {
-    workerPath: '/workers/worker.min.js',
-    corePath: '/workers/tesseract-core-simd-lstm.js',
-    langPath: '/tessdata',
+    workerPath,
+    corePath,
+    langPath,
     gzip: true,
     logger: (m: any) => {
       if (onProgress && m.status && typeof m.progress === 'number') {
@@ -100,9 +105,7 @@ export function preprocessImageForOcr(
 
   for (let i = 0; i < d.length; i += 4) {
     const lum = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
-    // Contrast stretch
     let stretched = ((lum - minLum) / range) * 255;
-    // Slight adaptive thresholding curve
     if (stretched < 140) {
       stretched = stretched * 0.7; // darken ink
     } else {

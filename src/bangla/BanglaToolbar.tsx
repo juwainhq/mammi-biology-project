@@ -54,7 +54,7 @@ export const BanglaToolbar: React.FC<BanglaToolbarProps> = ({
     }
   };
 
-  // Common HSC Biology symbols & terms
+  // Standard HSC Biology terms & notation
   const bioSymbols = [
     'DNA',
     'RNA',
@@ -71,176 +71,166 @@ export const BanglaToolbar: React.FC<BanglaToolbarProps> = ({
     '♂',
     '♀',
     '±',
-    '×',
-    '÷',
     '→',
   ];
 
   return (
-    <div className="bangla-toolbar bg-white border-b border-gray-200 px-4 py-2 flex flex-wrap items-center justify-between gap-3 text-sm">
+    <div className="bg-surface border-b border-border px-6 py-2 flex flex-wrap items-center justify-between gap-4 text-xs font-mono">
       {/* Input Mode Toggle */}
-      <div className="flex items-center gap-2">
-        <span className="font-medium text-gray-700 flex items-center gap-1.5">
-          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
-          কীবোর্ড মোড:
+      <div className="flex items-center gap-3">
+        <span className="text-muted tracking-wider uppercase text-[11px] flex items-center gap-2">
+          <span className="w-1.5 h-1.5 bg-accent inline-block"></span>
+          Input
         </span>
-        <div className="inline-flex rounded-md shadow-sm border border-gray-300 overflow-hidden bg-gray-50">
+        <div className="inline-flex border border-border bg-black">
           <button
             type="button"
             onClick={() => onInputModeChange('unicode')}
-            className={`px-3 py-1 text-xs font-semibold transition-colors ${
+            className={`px-3 py-1 text-xs uppercase tracking-wider transition-colors ${
               inputMode === 'unicode'
-                ? 'bg-emerald-600 text-white'
-                : 'text-gray-700 hover:bg-gray-100'
+                ? 'bg-accent text-black font-semibold'
+                : 'text-muted hover:text-canvas'
             }`}
           >
-            ইউনিকোড (Avro)
+            Unicode (Avro)
           </button>
           <button
             type="button"
             onClick={() => onInputModeChange('bijoy')}
-            className={`px-3 py-1 text-xs font-semibold transition-colors ${
+            className={`px-3 py-1 text-xs uppercase tracking-wider transition-colors border-l border-border ${
               inputMode === 'bijoy'
-                ? 'bg-blue-600 text-white'
-                : 'text-gray-700 hover:bg-gray-100'
+                ? 'bg-accent text-black font-semibold'
+                : 'text-muted hover:text-canvas'
             }`}
             title="SutonnyMJ / Bijoy Classic কি-ম্যাপিং সরাসরি ইউনিকোডে রূপান্তরিত হবে"
           >
-            বিজয় ক্লাসিক (Bijoy 52)
+            Bijoy Classic
           </button>
         </div>
       </div>
 
       {/* Biology Terminology Quick Badges */}
       <div className="flex items-center gap-1.5 flex-wrap">
-        <span className="text-xs text-gray-500 font-medium">প্রতীক:</span>
+        <span className="text-[11px] text-muted tracking-wider uppercase mr-1">Symbols</span>
         {bioSymbols.map((sym) => (
           <button
             key={sym}
             type="button"
             onClick={() => onInsertText && onInsertText(sym)}
-            className="px-2 py-0.5 text-xs bg-gray-100 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300 text-gray-700 rounded border border-gray-200 font-mono transition-colors"
-            title={`ক্লিক করে পেপারের বর্তমান অংশে "${sym}" যোগ করুন`}
+            className="px-2 py-0.5 text-xs bg-surface-subtle hover:bg-surface-hover hover:border-accent text-canvas border border-border transition-colors font-mono"
+            title={`ক্লিক করে পেপারে যোগ করুন: "${sym}"`}
           >
             {sym}
           </button>
         ))}
       </div>
 
-      {/* Converter Button */}
+      {/* Converter Modal Button */}
       <div>
         <button
           type="button"
           onClick={() => setShowConverterModal(true)}
-          className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded-md hover:bg-blue-100 transition-colors shadow-sm"
+          className="inline-flex items-center gap-2 px-3 py-1 text-xs text-canvas bg-surface-subtle border border-border hover:border-accent transition-colors"
         >
-          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
-            />
-          </svg>
-          বিজয় ⇄ ইউনিকোড কনভার্টার
+          <span className="text-accent">⇄</span>
+          <span>Bijoy ⇄ Unicode Converter</span>
         </button>
       </div>
 
-      {/* Full-featured Modal Converter */}
+      {/* Minimalist Monochrome Modal */}
       {showConverterModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-          <div className="bg-white rounded-xl shadow-2xl border border-gray-200 max-w-2xl w-full p-6 animate-in fade-in zoom-in-95 duration-150">
-            <div className="flex items-center justify-between pb-3 border-b border-gray-200">
-              <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2">
-                <span>🇧🇩</span>
-                বাংলা ফন্ট কনভার্টার (বিজয় ⇄ ইউনিকোড)
-              </h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+          <div className="bg-surface border border-border max-w-2xl w-full p-6 space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-border">
+              <div className="space-y-0.5">
+                <h3 className="text-sm font-semibold tracking-wider text-canvas uppercase flex items-center gap-2">
+                  <span className="text-accent">■</span> Bijoy ⇄ Unicode Conversion Engine
+                </h3>
+                <p className="text-[11px] text-muted font-sans">
+                  পুরনো SutonnyMJ বা আধুনিক ইউনিকোড বাংলা রূপান্তর। বৈজ্ঞানিক চিহ্ন অক্ষত থাকবে।
+                </p>
+              </div>
               <button
                 type="button"
                 onClick={() => setShowConverterModal(false)}
-                className="text-gray-400 hover:text-gray-600 rounded-lg p-1 text-sm"
+                className="text-muted hover:text-canvas text-base p-1"
               >
                 ✕
               </button>
             </div>
 
-            <p className="text-xs text-gray-600 mt-2 mb-4">
-              পুরনো বিজয় (SutonnyMJ / ANSI) টেক্সট এখানে পেস্ট করলে স্বয়ংক্রিয়ভাবে প্রমিত ইউনিকোডে
-              রূপান্তর করা যাবে। ইংরেজি বৈজ্ঞানিক পরিভাষা (DNA, ATP ইত্যাদি) অক্ষত থাকবে।
-            </p>
-
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Input Box */}
-              <div>
-                <div className="flex justify-between items-center mb-1">
-                  <label className="text-xs font-bold text-gray-700">
-                    ইনপুট টেক্সট {conversionDirection === 'b2u' ? '(বিজয়)' : '(ইউনিকোড)'}:
+              <div className="space-y-1">
+                <div className="flex justify-between items-center">
+                  <label className="text-[11px] text-muted tracking-wider uppercase">
+                    Input {conversionDirection === 'b2u' ? '(Bijoy/ANSI)' : '(Unicode)'}
                   </label>
                   <button
                     type="button"
                     onClick={() => setInputText('')}
-                    className="text-xs text-gray-400 hover:text-gray-600"
+                    className="text-[10px] text-muted hover:text-canvas"
                   >
-                    মুছে ফেলুন
+                    Clear
                   </button>
                 </div>
                 <textarea
                   rows={6}
                   value={inputText}
                   onChange={(e) => handleAutoDetect(e.target.value)}
-                  placeholder="এখানে টেক্সট পেস্ট করুন (যেমন: Avwg evsjvq Mvb MvB)..."
-                  className="w-full text-sm p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono"
+                  placeholder="Paste legacy Bijoy or Unicode text here..."
+                  className="w-full text-xs p-2.5 bg-black border border-border text-canvas focus:border-accent outline-none font-mono"
                 />
               </div>
 
               {/* Output Box */}
-              <div>
-                <div className="flex justify-between items-center mb-1">
-                  <label className="text-xs font-bold text-gray-700">
-                    রূপান্তরিত টেক্সট {conversionDirection === 'b2u' ? '(ইউনিকোড)' : '(বিজয়)'}:
+              <div className="space-y-1">
+                <div className="flex justify-between items-center">
+                  <label className="text-[11px] text-muted tracking-wider uppercase">
+                    Converted {conversionDirection === 'b2u' ? '(Unicode)' : '(Bijoy/ANSI)'}
                   </label>
                   <button
                     type="button"
                     onClick={() => navigator.clipboard.writeText(convertedText)}
-                    className="text-xs text-blue-600 hover:text-blue-800 font-medium"
+                    className="text-[10px] text-accent hover:underline"
                   >
-                    কপি করুন
+                    Copy
                   </button>
                 </div>
                 <textarea
                   rows={6}
                   readOnly
                   value={convertedText}
-                  placeholder="রূপান্তরিত টেক্সট এখানে দেখা যাবে..."
-                  className="w-full text-sm p-2.5 border border-gray-300 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="Output appears here..."
+                  className="w-full text-xs p-2.5 bg-black border border-border text-canvas focus:border-accent outline-none font-mono"
                 />
               </div>
             </div>
 
             {/* Action Bar */}
-            <div className="mt-5 pt-3 border-t border-gray-200 flex flex-wrap items-center justify-between gap-3">
+            <div className="pt-3 border-t border-border flex flex-wrap items-center justify-between gap-3">
               <div className="flex items-center gap-2">
                 <button
                   type="button"
                   onClick={() => handleConvert('b2u')}
-                  className={`px-3 py-1.5 text-xs font-semibold rounded-lg shadow-sm border ${
+                  className={`px-3 py-1 text-xs border transition-colors ${
                     conversionDirection === 'b2u'
-                      ? 'bg-blue-600 text-white border-blue-600'
-                      : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                      ? 'bg-accent text-black font-semibold border-accent'
+                      : 'bg-black text-muted border-border hover:text-canvas'
                   }`}
                 >
-                  বিজয় ➔ ইউনিকোড
+                  Bijoy ➔ Unicode
                 </button>
                 <button
                   type="button"
                   onClick={() => handleConvert('u2b')}
-                  className={`px-3 py-1.5 text-xs font-semibold rounded-lg shadow-sm border ${
+                  className={`px-3 py-1 text-xs border transition-colors ${
                     conversionDirection === 'u2b'
-                      ? 'bg-blue-600 text-white border-blue-600'
-                      : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                      ? 'bg-accent text-black font-semibold border-accent'
+                      : 'bg-black text-muted border-border hover:text-canvas'
                   }`}
                 >
-                  ইউনিকোড ➔ বিজয়
+                  Unicode ➔ Bijoy
                 </button>
               </div>
 
@@ -248,18 +238,18 @@ export const BanglaToolbar: React.FC<BanglaToolbarProps> = ({
                 <button
                   type="button"
                   onClick={() => setShowConverterModal(false)}
-                  className="px-4 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg"
+                  className="px-3 py-1 text-xs text-muted hover:text-canvas border border-border"
                 >
-                  বন্ধ করুন
+                  Close
                 </button>
                 {onInsertText && (
                   <button
                     type="button"
                     onClick={handleApplyToCanvas}
                     disabled={!convertedText}
-                    className="px-4 py-1.5 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg shadow-sm"
+                    className="px-4 py-1 text-xs font-semibold text-black bg-accent hover:bg-accent-hover disabled:opacity-30"
                   >
-                    পেপারে যোগ করুন
+                    Insert to Editor
                   </button>
                 )}
               </div>

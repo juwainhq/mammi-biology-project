@@ -73,7 +73,7 @@ export const App: React.FC = () => {
       const prev = history[historyIndex - 1];
       setHistoryIndex(historyIndex - 1);
       setPaper(prev);
-      showNotification('পূর্ববর্তী অবস্থায় ফিরিয়ে নেওয়া হয়েছে (Undo)');
+      showNotification('Undo applied');
     }
   };
 
@@ -82,7 +82,7 @@ export const App: React.FC = () => {
       const next = history[historyIndex + 1];
       setHistoryIndex(historyIndex + 1);
       setPaper(next);
-      showNotification('পুনরায় প্রয়োগ করা হয়েছে (Redo)');
+      showNotification('Redo applied');
     }
   };
 
@@ -254,7 +254,7 @@ export const App: React.FC = () => {
               sections: updatedSections,
               updatedAt: Date.now(),
             });
-            showNotification('ডায়াগ্রাম চিত্র সফলভাবে যুক্ত হয়েছে!');
+            showNotification('Diagram image added');
           }
         };
         reader.readAsDataURL(file);
@@ -276,57 +276,55 @@ export const App: React.FC = () => {
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      showNotification('DOCX ফাইল সফলভাবে তৈরি ও ডাউনলোড হয়েছে!');
+      showNotification('DOCX export complete');
     } catch (err: any) {
       console.error('Export error:', err);
-      alert('DOCX এক্সপোর্ট তৈরিতে সমস্যা হয়েছে: ' + err.message);
+      alert('Error exporting DOCX: ' + err.message);
     } finally {
       setIsExporting(false);
     }
   };
 
   return (
-    <div className="flex flex-col h-screen w-screen overflow-hidden bg-gray-100 font-sans">
-      {/* ================= TOP NAVBAR ================= */}
-      <header className="bg-emerald-800 text-white px-4 py-2.5 flex items-center justify-between shadow-md z-20">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center font-bold text-white shadow">
-            🧬
-          </div>
-          <div>
-            <h1 className="text-base font-bold tracking-tight flex items-center gap-2">
+    <div className="flex flex-col h-screen w-screen overflow-hidden bg-black text-canvas font-sans selection:bg-accent selection:text-black">
+      {/* ================= TOP NAVBAR (PORTFOLIO STYLE) ================= */}
+      <header className="bg-black border-b border-border px-6 py-3 flex items-center justify-between select-none z-20">
+        <div className="flex items-center gap-4">
+          <span className="font-mono text-accent text-sm font-bold">01</span>
+          <div className="space-y-0.5">
+            <h1 className="text-xs uppercase font-mono font-semibold tracking-widest text-canvas flex items-center gap-2">
               HSC Biology Question Builder
-              <span className="text-[10px] font-normal bg-emerald-700/80 text-emerald-100 px-2 py-0.5 rounded-full border border-emerald-600">
-                V1 প্রফেশনাল
+              <span className="text-[10px] text-muted border border-border px-1.5 py-0.2">
+                Static V1
               </span>
             </h1>
-            <p className="text-[11px] text-emerald-200">
-              ছবি থেকে প্রশ্ন সনাক্তকরণ ➔ বাংলা এডিটর ➔ প্রমিত DOCX এক্সপোর্ট
+            <p className="text-[10px] text-muted font-sans tracking-wide">
+              Editorial Question Paper Engine · juwainhq
             </p>
           </div>
         </div>
 
-        {/* Action Buttons */}
-        <div className="flex items-center gap-2">
+        {/* Action Controls */}
+        <div className="flex items-center gap-3 font-mono text-xs">
           {/* Undo / Redo */}
-          <div className="flex items-center bg-emerald-900/50 rounded-lg p-0.5 border border-emerald-700">
+          <div className="inline-flex border border-border bg-surface">
             <button
               type="button"
               onClick={handleUndo}
               disabled={historyIndex <= 0}
-              className="p-1.5 hover:bg-emerald-700 disabled:opacity-30 rounded text-xs"
-              title="পূর্ববর্তী অবস্থা (Undo)"
+              className="px-2.5 py-1 text-muted hover:text-canvas disabled:opacity-30 border-r border-border"
+              title="Undo"
             >
-              ↩
+              Undo
             </button>
             <button
               type="button"
               onClick={handleRedo}
               disabled={historyIndex >= history.length - 1}
-              className="p-1.5 hover:bg-emerald-700 disabled:opacity-30 rounded text-xs"
-              title="পরবর্তী অবস্থা (Redo)"
+              className="px-2.5 py-1 text-muted hover:text-canvas disabled:opacity-30"
+              title="Redo"
             >
-              ↪
+              Redo
             </button>
           </div>
 
@@ -334,10 +332,9 @@ export const App: React.FC = () => {
           <button
             type="button"
             onClick={() => setIsUploadModalOpen(true)}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold shadow transition-colors"
+            className="px-3 py-1 bg-surface border border-border hover:border-accent text-canvas transition-colors uppercase tracking-wider"
           >
-            <span>📷</span>
-            <span>প্রশ্ন আপলোড ও OCR</span>
+            Upload Image / OCR
           </button>
 
           {/* Export DOCX Button */}
@@ -345,10 +342,9 @@ export const App: React.FC = () => {
             type="button"
             onClick={handleExportDocx}
             disabled={isExporting}
-            className="flex items-center gap-1.5 px-4 py-1.5 bg-amber-500 hover:bg-amber-400 text-gray-950 font-bold rounded-lg text-xs shadow-md transition-all active:scale-95 disabled:opacity-50"
+            className="px-4 py-1 bg-accent hover:bg-accent-hover text-black font-semibold transition-colors uppercase tracking-wider disabled:opacity-40"
           >
-            <span>📄</span>
-            <span>{isExporting ? 'তৈরি হচ্ছে...' : 'DOCX এক্সপোর্ট'}</span>
+            {isExporting ? 'Generating...' : 'Export DOCX'}
           </button>
         </div>
       </header>
@@ -365,7 +361,7 @@ export const App: React.FC = () => {
                 ...active,
                 stimulus: (active.stimulus || '') + ' ' + txt,
               });
-              showNotification(`"${txt}" যোগ করা হয়েছে`);
+              showNotification(`Inserted "${txt}"`);
             }
           }
         }}
@@ -407,10 +403,10 @@ export const App: React.FC = () => {
         />
       </div>
 
-      {/* Toast Notification */}
+      {/* Minimal Toast Notification */}
       {notification && (
-        <div className="fixed bottom-4 right-4 z-50 bg-gray-900 text-white text-xs px-4 py-2 rounded-lg shadow-lg flex items-center gap-2 animate-in fade-in slide-in-from-bottom-2">
-          <span>✓</span>
+        <div className="fixed bottom-6 right-6 z-50 bg-black border border-accent text-canvas text-xs px-4 py-2 font-mono flex items-center gap-2">
+          <span className="text-accent">■</span>
           <span>{notification}</span>
         </div>
       )}
@@ -420,7 +416,6 @@ export const App: React.FC = () => {
         isOpen={isUploadModalOpen}
         onClose={() => setIsUploadModalOpen(false)}
         onQuestionsExtracted={(extractedQuestions) => {
-          // Add newly extracted questions to first section
           const sec = [...paper.sections];
           if (sec[0]) {
             sec[0].questions = [...sec[0].questions, ...extractedQuestions];
@@ -434,7 +429,7 @@ export const App: React.FC = () => {
             setActiveQuestionId(extractedQuestions[0].id);
           }
           showNotification(
-            `সফলভাবে ${extractedQuestions.length} টি প্রশ্ন সনাক্ত ও যুক্ত করা হয়েছে!`
+            `Extracted & placed ${extractedQuestions.length} question(s)`
           );
         }}
       />

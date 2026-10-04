@@ -29,7 +29,6 @@ export const ImageUploadModal: React.FC<ImageUploadModalProps> = ({
     const files = Array.from(e.target.files);
     setErrorMessage('');
 
-    // Generate previews
     const newPreviews: string[] = [];
     let loadedCount = 0;
     files.forEach((file) => {
@@ -59,7 +58,7 @@ export const ImageUploadModal: React.FC<ImageUploadModalProps> = ({
 
     try {
       for (let idx = 0; idx < previews.length; idx++) {
-        setOcrStatus(`ছবি ${idx + 1}/${previews.length} প্রসেসিং চলছে...`);
+        setOcrStatus(`Processing image ${idx + 1}/${previews.length}...`);
         const result = await runBanglaOcr(previews[idx], (p: OcrProgress) => {
           setOcrPercent(Math.round(p.progress * 100));
         });
@@ -70,7 +69,6 @@ export const ImageUploadModal: React.FC<ImageUploadModalProps> = ({
 
       // Attach first diagram image to first question if user uploaded diagram
       if (previews.length > 0 && structured.length > 0) {
-        // If image might contain diagram, store diagram image reference
         structured[0].diagrams.push({
           id: `diag-${Date.now()}`,
           dataUrl: previews[0],
@@ -82,10 +80,10 @@ export const ImageUploadModal: React.FC<ImageUploadModalProps> = ({
       }
 
       setRecognizedQuestions(structured);
-      setOcrStatus('সফলভাবে সনাক্ত করা হয়েছে!');
+      setOcrStatus('Extraction complete.');
     } catch (err: any) {
       console.error('OCR Error:', err);
-      setErrorMessage('OCR প্রক্রিয়াকরণে সমস্যা হয়েছে: ' + (err.message || String(err)));
+      setErrorMessage('OCR Error: ' + (err.message || String(err)));
     } finally {
       setIsProcessing(false);
     }
@@ -99,25 +97,22 @@ export const ImageUploadModal: React.FC<ImageUploadModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-      <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 max-w-4xl w-full max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-sm p-4">
+      <div className="bg-surface border border-border max-w-4xl w-full max-h-[90vh] flex flex-col overflow-hidden text-canvas font-mono">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-emerald-50/50">
-          <div className="flex items-center gap-2.5">
-            <span className="p-2 bg-emerald-100 text-emerald-800 rounded-lg text-lg">📷</span>
-            <div>
-              <h2 className="text-lg font-bold text-gray-900">
-                জীববিজ্ঞান প্রশ্নপত্র ছবি থেকে OCR ও তৈরি
-              </h2>
-              <p className="text-xs text-gray-600">
-                ছবি আপলোড করুন ➔ বাংলা OCR ➔ অটো ক, খ, গ, ঘ ও উদ্দীপক সনাক্তকরণ
-              </p>
-            </div>
+        <div className="flex items-center justify-between px-6 py-4 border-b border-border bg-black">
+          <div className="space-y-0.5">
+            <h2 className="text-sm font-semibold tracking-wider uppercase text-canvas flex items-center gap-2">
+              <span className="text-accent">■</span> OCR Question Extraction
+            </h2>
+            <p className="text-[11px] text-muted font-sans">
+              Client-side Bangla + English OCR with automatic Creative Question structure detection.
+            </p>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 rounded-lg p-1.5"
+            className="text-muted hover:text-canvas text-base p-1"
           >
             ✕
           </button>
@@ -128,7 +123,7 @@ export const ImageUploadModal: React.FC<ImageUploadModalProps> = ({
           {/* Upload Dropzone */}
           <div
             onClick={() => fileInputRef.current?.click()}
-            className="border-2 border-dashed border-gray-300 hover:border-emerald-500 rounded-xl p-6 text-center cursor-pointer bg-gray-50/60 hover:bg-emerald-50/20 transition-all"
+            className="border border-dashed border-border hover:border-accent p-8 text-center cursor-pointer bg-black transition-colors"
           >
             <input
               ref={fileInputRef}
@@ -139,24 +134,12 @@ export const ImageUploadModal: React.FC<ImageUploadModalProps> = ({
               className="hidden"
             />
             <div className="flex flex-col items-center justify-center space-y-2">
-              <svg
-                className="w-10 h-10 text-emerald-600"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                />
-              </svg>
-              <p className="text-sm font-semibold text-gray-700">
-                এখানে ক্লিক করে প্রশ্নপত্রের ছবি আপলোড করুন
+              <span className="text-2xl text-accent">↑</span>
+              <p className="text-xs uppercase tracking-wider font-semibold text-canvas">
+                Click or Drop Question Image(s) Here
               </p>
-              <p className="text-xs text-gray-500">
-                JPG, PNG, JPEG বা WEBP (একাধিক ছবি সাপোর্ট করে)
+              <p className="text-[11px] text-muted">
+                Supports multiple JPG, PNG, WEBP files
               </p>
             </div>
           </div>
@@ -164,22 +147,22 @@ export const ImageUploadModal: React.FC<ImageUploadModalProps> = ({
           {/* Previews */}
           {previews.length > 0 && (
             <div>
-              <h4 className="text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">
-                আপলোড করা ছবিসমূহ ({previews.length} টি):
+              <h4 className="text-[11px] text-muted uppercase tracking-wider mb-2">
+                Selected Images ({previews.length}):
               </h4>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 {previews.map((src, i) => (
                   <div
                     key={i}
-                    className="relative group border rounded-lg overflow-hidden bg-gray-100 aspect-video flex items-center justify-center shadow-sm"
+                    className="relative border border-border bg-black aspect-video flex items-center justify-center overflow-hidden"
                   >
                     <img
                       src={src}
                       alt={`Upload ${i + 1}`}
                       className="object-contain max-h-full max-w-full"
                     />
-                    <span className="absolute bottom-1 right-1 bg-black/60 text-white text-[10px] px-1.5 py-0.5 rounded">
-                      ছবি {i + 1}
+                    <span className="absolute bottom-1 right-1 bg-black/80 text-[10px] text-muted px-1.5 border border-border">
+                      #{i + 1}
                     </span>
                   </div>
                 ))}
@@ -189,60 +172,59 @@ export const ImageUploadModal: React.FC<ImageUploadModalProps> = ({
 
           {/* Progress Indicator */}
           {isProcessing && (
-            <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-xl space-y-2">
-              <div className="flex justify-between text-xs font-semibold text-emerald-800">
-                <span>{ocrStatus || 'প্রক্রিয়াকরণ চলছে...'}</span>
-                <span>{ocrPercent}%</span>
+            <div className="p-4 bg-black border border-border space-y-2">
+              <div className="flex justify-between text-xs text-muted">
+                <span>{ocrStatus || 'Processing...'}</span>
+                <span className="text-accent">{ocrPercent}%</span>
               </div>
-              <div className="w-full bg-emerald-200 rounded-full h-2 overflow-hidden">
+              <div className="w-full bg-surface h-1 overflow-hidden">
                 <div
-                  className="bg-emerald-600 h-2 rounded-full transition-all duration-200"
+                  className="bg-accent h-1 transition-all duration-200"
                   style={{ width: `${ocrPercent}%` }}
                 />
               </div>
-              <p className="text-[11px] text-emerald-700">
-                বাংলা ব্যাকরণ ও জীববিজ্ঞানের শব্দকোষ দিয়ে অক্ষর সনাক্ত করা হচ্ছে...
-              </p>
             </div>
           )}
 
           {/* Error Message */}
           {errorMessage && (
-            <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-lg">
+            <div className="p-3 bg-black border border-red-900 text-red-400 text-xs">
               {errorMessage}
             </div>
           )}
 
           {/* Detected Structure Preview */}
           {recognizedQuestions.length > 0 && (
-            <div className="border border-gray-200 rounded-xl p-4 bg-gray-50/50 space-y-3">
-              <h4 className="text-sm font-bold text-emerald-800 flex items-center gap-2">
-                <span>✓</span> সনাক্তকৃত প্রশ্ন কাঠামো ({recognizedQuestions.length} টি প্রশ্ন):
+            <div className="border border-border p-4 bg-black space-y-3">
+              <h4 className="text-xs text-accent uppercase tracking-wider flex items-center gap-2">
+                <span>■</span> Detected Questions ({recognizedQuestions.length}):
               </h4>
               <div className="space-y-3 max-h-60 overflow-y-auto pr-1">
                 {recognizedQuestions.map((q) => (
                   <div
                     key={q.id}
-                    className="p-3 bg-white border border-gray-200 rounded-lg text-xs space-y-1.5 shadow-sm"
+                    className="p-3 bg-surface border border-border text-xs space-y-1.5"
                   >
-                    <div className="font-bold text-gray-900 flex justify-between">
-                      <span>প্রশ্ন {q.number}।</span>
-                      <span className="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded text-[11px]">
-                        {q.kind === 'creative' ? 'সৃজনশীল' : 'বহুনির্বাচনি'}
+                    <div className="font-semibold text-canvas flex justify-between">
+                      <span>Question {q.number}</span>
+                      <span className="text-accent text-[11px] uppercase">
+                        {q.kind}
                       </span>
                     </div>
                     {q.stimulus && (
-                      <p className="text-gray-700 italic border-l-2 border-emerald-500 pl-2">
+                      <p className="text-muted italic border-l border-accent/60 pl-2 font-sans">
                         {q.stimulus}
                       </p>
                     )}
                     {q.subQuestions && q.subQuestions.length > 0 && (
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-1 pt-1">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-1.5 pt-1 font-sans">
                         {q.subQuestions.map((sq) => (
-                          <div key={sq.id} className="text-gray-800 bg-gray-50 p-1 rounded">
-                            <span className="font-bold text-emerald-700">{sq.part})</span>{' '}
+                          <div key={sq.id} className="text-canvas bg-black p-1.5 border border-border">
+                            <span className="text-accent font-mono font-semibold">
+                              ({sq.part})
+                            </span>{' '}
                             {sq.text}{' '}
-                            <span className="text-gray-500 font-mono">[{sq.marks}]</span>
+                            <span className="text-muted font-mono">[{sq.marks}]</span>
                           </div>
                         ))}
                       </div>
@@ -255,13 +237,13 @@ export const ImageUploadModal: React.FC<ImageUploadModalProps> = ({
         </div>
 
         {/* Footer Actions */}
-        <div className="px-6 py-4 border-t border-gray-200 bg-gray-50 flex items-center justify-between">
+        <div className="px-6 py-4 border-t border-border bg-black flex items-center justify-between">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-100"
+            className="px-4 py-1.5 text-xs text-muted hover:text-canvas border border-border"
           >
-            বাতিল
+            Cancel
           </button>
           <div className="flex items-center gap-3">
             {previews.length > 0 && (
@@ -269,19 +251,18 @@ export const ImageUploadModal: React.FC<ImageUploadModalProps> = ({
                 type="button"
                 onClick={handleRunOcr}
                 disabled={isProcessing}
-                className="px-4 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 rounded-lg shadow-sm flex items-center gap-1.5"
+                className="px-4 py-1.5 text-xs uppercase tracking-wider font-semibold text-black bg-accent hover:bg-accent-hover disabled:opacity-30"
               >
-                <span>🔍</span>
-                {isProcessing ? 'OCR চলছে...' : 'OCR এক্সট্র্যাক্ট করুন'}
+                {isProcessing ? 'Processing...' : 'Run Bangla OCR'}
               </button>
             )}
             {recognizedQuestions.length > 0 && (
               <button
                 type="button"
                 onClick={handleApplyToEditor}
-                className="px-5 py-2 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow-sm"
+                className="px-4 py-1.5 text-xs uppercase tracking-wider font-semibold text-black bg-canvas hover:bg-white"
               >
-                এডিটরে স্থাপন করুন ➔
+                Place in Paper ➔
               </button>
             )}
           </div>
