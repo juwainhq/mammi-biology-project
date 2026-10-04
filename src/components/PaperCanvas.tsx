@@ -100,21 +100,21 @@ export const PaperCanvas: React.FC<PaperCanvasProps> = ({
                       onClick={() => onSelectQuestion(q.id)}
                       className={`relative p-3 transition-all group ${
                         isActive
-                          ? 'outline outline-1 outline-[#DAAB4E] bg-[#FBF9F2]'
+                          ? 'outline outline-1 outline-[#F04444] bg-[#FFF1F1]'
                           : 'hover:bg-[#F9F9F9]'
                       }`}
                     >
                       {/* Floating Action Badge on active */}
                       {isActive && (
-                        <div className="absolute -top-3 right-2 bg-[#000000] text-[#FAFAFA] text-[10px] px-2 py-0.5 border border-[#DAAB4E] flex items-center gap-2 font-mono">
-                          <span className="text-[#DAAB4E] font-semibold">Q{q.number}</span>
+                        <div className="absolute -top-3 right-2 bg-[#000000] text-[#FAFAFA] text-[10px] px-2 py-0.5 border border-[#F04444] flex items-center gap-2 font-mono">
+                          <span className="text-[#F04444] font-semibold">Q{q.number}</span>
                           <button
                             type="button"
                             onClick={(e) => {
                               e.stopPropagation();
                               onAddDiagram(q.id);
                             }}
-                            className="hover:text-[#DAAB4E]"
+                            className="hover:text-[#F04444]"
                             title="চিত্র বা ডায়াগ্রাম যুক্ত করুন"
                           >
                             +Fig
@@ -126,7 +126,7 @@ export const PaperCanvas: React.FC<PaperCanvasProps> = ({
                                 e.stopPropagation();
                                 onAddSubQuestion(q.id);
                               }}
-                              className="hover:text-[#DAAB4E]"
+                              className="hover:text-[#F04444]"
                               title="সাব-প্রশ্ন যুক্ত করুন"
                             >
                               +Sub
@@ -158,7 +158,7 @@ export const PaperCanvas: React.FC<PaperCanvasProps> = ({
                               onUpdateQuestion({ ...q, stimulus: e.target.value })
                             }
                             placeholder="এখানে উদ্দীপক বা মূল প্রশ্নের বিবরণ লিখুন..."
-                            className="w-full bg-transparent resize-y outline-none focus:bg-white focus:outline focus:outline-1 focus:outline-[#DAAB4E] p-1 leading-relaxed"
+                            className="w-full bg-transparent resize-y outline-none focus:bg-white focus:outline focus:outline-1 focus:outline-[#F04444] p-1 leading-relaxed"
                           />
                         </div>
                       </div>
@@ -218,7 +218,7 @@ export const PaperCanvas: React.FC<PaperCanvasProps> = ({
                                     updated[sqIdx] = { ...sq, text: e.target.value };
                                     onUpdateQuestion({ ...q, subQuestions: updated });
                                   }}
-                                  className="flex-1 bg-transparent outline-none focus:outline focus:outline-1 focus:outline-[#DAAB4E] px-1 py-0.5"
+                                  className="flex-1 bg-transparent outline-none focus:outline focus:outline-1 focus:outline-[#F04444] px-1 py-0.5"
                                 />
                               </div>
                               <div className="flex items-center gap-1 font-bold text-[#000000]">
@@ -247,7 +247,7 @@ export const PaperCanvas: React.FC<PaperCanvasProps> = ({
                                   updated[optIdx] = { ...opt, text: e.target.value };
                                   onUpdateQuestion({ ...q, options: updated });
                                 }}
-                                className="flex-1 bg-transparent outline-none focus:outline focus:outline-1 focus:outline-[#DAAB4E] px-1 py-0.5"
+                                className="flex-1 bg-transparent outline-none focus:outline focus:outline-1 focus:outline-[#F04444] px-1 py-0.5"
                               />
                             </div>
                           ))}

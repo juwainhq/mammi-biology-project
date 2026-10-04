@@ -21,8 +21,8 @@ export default {
         },
         muted: '#8C8C8C',
         accent: {
-          DEFAULT: '#DAAB4E', // signature warm gold
-          hover: '#E5BA62',
+          DEFAULT: '#F04444', // signature red
+          hover: '#FF6262',
           muted: '#8F6E2B',
           subtle: 'rgba(218, 171, 78, 0.12)',
         },
