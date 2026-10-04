@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Kalpurush';
+  src: url('/fonts/kalpurush.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Kalpurush', 'Noto Sans Bengali', system-ui, -apple-system, sans-serif;
+  background-color: #f3f4f6;
+  color: #111827;
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-kalpurush {
+  font-family: 'Kalpurush', 'Noto Sans Bengali', sans-serif;
+}
+
+.font-noto {
+  font-family: 'Noto Sans Bengali', sans-serif;
+}
+
+.font-tiro {
+  font-family: 'Tiro Bangla', 'Noto Serif Bengali', serif;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}

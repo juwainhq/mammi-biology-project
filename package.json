@@ -1,0 +1,42 @@
+{
+  "name": "hsc-biology-question-builder",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "HSC Biology Question Builder — upload HSC Biology question images, OCR them (Bangla + English), edit the detected question structure on an HSC-paper canvas and export a real, editable DOCX.",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "verify:docx": "node scripts/verify-docx.mjs",
+    "verify:ocr": "node scripts/verify-ocr.mjs"
+  },
+  "dependencies": {
+    "docx": "^9.5.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tesseract.js": "^6.0.1"
+  },
+  "devDependencies": {
+    "@fontsource/noto-sans-bengali": "^5.3.0",
+    "@fontsource/tinos": "^5.3.0",
+    "@fontsource/tiro-bangla": "^5.3.0",
+    "@hixbe/kalpurush": "^5.2.5",
+    "@tesseract.js-data/ben": "^1.0.0",
+    "@tesseract.js-data/eng": "^1.0.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.20",
+    "mammoth": "^1.9.0",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.11",
+    "vitest": "^2.1.8"
+  }
+}
