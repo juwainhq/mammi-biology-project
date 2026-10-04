@@ -3,10 +3,9 @@ import react from '@vitejs/plugin-react';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  // Use relative base path so the build assets load seamlessly whether deployed at:
-  // - root: https://domain.com/
-  // - subpath: https://juwainhq.github.io/mammi-biology-project/
-  base: './',
+  // GitHub Pages project site is hosted beneath this repository subpath.
+  // Vite also applies this base to emitted JS/CSS and imported assets.
+  base: '/mammi-biology-project/',
   plugins: [react()],
   server: {
     host: '0.0.0.0',
